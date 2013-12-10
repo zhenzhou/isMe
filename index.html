@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Welcome To My HomePage-zhenzhou.ou</title>
+	
+<link rel="shortcut icon" href="http://xiaopihai.duapp.com/theme/images/favicon2.ico">
+<link href="css/style.css" rel="stylesheet" media="screen" />
+<link rel="stylesheet" href="css/main.css" type="text/css" media="screen">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/three.min.js"></script>
+<script type="text/javascript" src="js/Detector.js"></script>
+
+<!--導航菜單 -->
+<script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
+<script type="text/javascript" src="js/jquery.easing.min.js"></script>
+<script type="text/javascript" src="js/jquery.mainmenuslide.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("ul").mainmenuslide({
+			fx: "backout",
+			speed: 700,
+			click: function(event, menuItem) {
+				return false;
+			}
+		});
+	});
+function getUrl(url){
+	$.get(url,function(data){
+		$('#content').html(data);
+	});
+}
+function openUrl(url){
+	window.open(url);
+}
+</script>
+</head>
+<body>
+	<div id="mainDiv">
+		<div id="header">
+			<div id="welcome">
+				Welcome To My HomePage!
+			</div>
+			<div class="header_navigation">
+				<ul class="mainmenuslide">
+					<li><a onclick="getUrl('./me.html?ASDf');"  href="./index.html" >个人简介</a></li>
+					<li><a onclick="getUrl('./learn.html');"  href="./learn.html">学习经历</a></li>
+					<li><a onclick="getUrl('./job.html');"    href="./job.html">工作经历</a></li>
+					<li><a onclick="openUrl('http://www.cnblogs.com/ouzhenzhou/');"href="http://www.cnblogs.com/ouzhenzhou/" target="_blank" >Blog</a></li>
+				</ul>
+			</div><!-- end header_navigation-->
+		</div><!-- end header -->
+		<br />
+		<div id="content">
+			<table border="0" cellpadding="0" width="100%">
+				<tr>
+					<td>姓名</td>
+					<td>欧镇洲</td>
+				</tr>
+				<tr>
+					<td>籍贯</td>
+					<td>湖南长沙宁乡</td>
+				</tr>
+				<tr>
+					<td>年龄</td>
+					<td>25</td>
+				</tr>
+				<tr>
+					<td>出生年月</td>
+					<td>1989-04-04</td>
+				</tr>
+				<tr>
+					<td>婚姻状况</td>
+					<td>未婚</td>
+				</tr>
+				<tr>
+					<td>邮箱</td>
+					<td>zhenzhouou@gmail.com</td>
+				</tr>
+				<tr>
+					<td>QQ</td>
+					<td>408888253</td>
+				</tr>
+				<tr>
+					<td>自我评价</td>
+					<td>
+1.精通WAMP结构开发  <br />
+2.熟悉html、css、jquery、ajax  <br />
+3.熟练使用eclipse、vim等编辑器的开发 <br />
+4.热爱团队化开发 <br /><br />
+
+相信产品是有灵魂的,努力做出更多有高尚灵魂的产品; <br />
+很多东西不懂,可以直接Google,度娘,但真正Cool的点子和想法得用心学习和积累才能得到; <br />
+物以类聚,人以群分.只有拥有同样追求的人才会真正走到一起拼搏! <br />
+技术就是一场没有终点的游戏，最重要的是玩的开心和精彩！ <br />
+Fighting! <br />
+
+过完年就准备换工作了，希望还能留在游戏行业~ <br />
+					</td>
+				</tr>
+			</table>
+		</div><!-- end content -->
+	
+		
+	</div>
+	<br />
+	
+</body>
+
+
+<script id="vs" type="x-shader/x-vertex">
+
+	varying vec2 vUv;
+
+	void main() {
+
+		vUv = uv;
+		gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+	}
+
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+
+	uniform sampler2D map;
+
+	uniform vec3 fogColor;
+	uniform float fogNear;
+	uniform float fogFar;
+
+	varying vec2 vUv;
+
+	void main() {
+
+		float depth = gl_FragCoord.z / gl_FragCoord.w;
+		float fogFactor = smoothstep( fogNear, fogFar, depth );
+
+		gl_FragColor = texture2D( map, vUv );
+		gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+		gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+
+	}
+
+</script>
+
+<script type="text/javascript">
+
+	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+	var container;
+	var camera, scene, renderer;
+	var mesh, geometry, material;
+
+	var mouseX = 0, mouseY = 0;
+	var start_time = Date.now();
+
+	var windowHalfX = window.innerWidth / 2;
+	var windowHalfY = window.innerHeight / 2;
+
+	init();
+
+	function init() {
+
+		container = document.createElement( 'div' );
+		container.style.position='absolute';
+		container.style.top='0px';
+		container.style.zIndex='-99';
+		$('#mainDiv').append( container );
+
+		// Bg gradient
+
+		var canvas = document.createElement( 'canvas' );
+		canvas.width = 32;
+		canvas.height = 15;
+
+		var context = canvas.getContext( '2d' );
+
+		var gradient = context.createLinearGradient( 0, 0, 0, canvas.height );
+		gradient.addColorStop(0, "#1e4877");
+		gradient.addColorStop(0.5, "#4584b4");
+
+		context.fillStyle = gradient;
+		context.fillRect(0, 0, canvas.width, canvas.height);
+
+		container.style.background = 'url(' + canvas.toDataURL('image/png') + ')';
+				container.style.backgroundSize = '32px 100%';
+
+				//
+
+				camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 3000 );
+				camera.position.z = 6000;
+
+				scene = new THREE.Scene();
+
+				geometry = new THREE.Geometry();
+
+				var texture = THREE.ImageUtils.loadTexture( 'cloud10.png', null, animate );
+				texture.magFilter = THREE.LinearMipMapLinearFilter;
+				texture.minFilter = THREE.LinearMipMapLinearFilter;
+
+				var fog = new THREE.Fog( 0x4584b4, - 100, 3000 );
+
+				material = new THREE.ShaderMaterial( {
+
+uniforms: {
+
+"map": { type: "t", value: texture },
+"fogColor" : { type: "c", value: fog.color },
+"fogNear" : { type: "f", value: fog.near },
+"fogFar" : { type: "f", value: fog.far },
+
+},
+vertexShader: document.getElementById( 'vs' ).textContent,
+fragmentShader: document.getElementById( 'fs' ).textContent,
+depthWrite: false,
+depthTest: false,
+transparent: true
+
+} );
+
+var plane = new THREE.Mesh( new THREE.PlaneGeometry( 64, 64 ) );
+
+for ( var i = 0; i < 8000; i++ ) {
+
+	plane.position.x = Math.random() * 1000 - 500;
+	plane.position.y = - Math.random() * Math.random() * 200 - 15;
+	plane.position.z = i;
+	plane.rotation.z = Math.random() * Math.PI;
+	plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+
+	THREE.GeometryUtils.merge( geometry, plane );
+
+}
+
+mesh = new THREE.Mesh( geometry, material );
+scene.add( mesh );
+
+mesh = new THREE.Mesh( geometry, material );
+mesh.position.z = - 8000;
+scene.add( mesh );
+
+renderer = new THREE.WebGLRenderer( { antialias: false } );
+renderer.setSize( window.innerWidth, window.innerHeight );
+container.appendChild( renderer.domElement );
+
+document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+window.addEventListener( 'resize', onWindowResize, false );
+
+}
+
+function onDocumentMouseMove( event ) {
+
+	mouseX = ( event.clientX - windowHalfX ) * 0.25;
+	mouseY = ( event.clientY - windowHalfY ) * 0.15;
+
+}
+
+function onWindowResize( event ) {
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+function animate() {
+
+	requestAnimationFrame( animate );
+
+	position = ( ( Date.now() - start_time ) * 0.03 ) % 8000;
+
+	camera.position.x += ( mouseX - camera.position.x ) * 0.01;
+	camera.position.y += ( - mouseY - camera.position.y ) * 0.01;
+	camera.position.z = - position + 8000;
+
+	renderer.render( scene, camera );
+
+}
+
+</script>
+</html>
