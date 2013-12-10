@@ -18,13 +18,13 @@ a:visited{ text-decoration:none;}
 	width:1000px;
 	height:108px;
 	margin:auto;
-	}
+}
 .header_navigation{
 	float:right;
 	width:550px;
 	height:24px;
 	margin:24px 0 0 0;
-	}
+}
 /*****welcome*****/
 #welcome{
 	position:absolute;
@@ -38,7 +38,7 @@ a:visited{ text-decoration:none;}
 	width:940px;
 	margin:auto;
 	padding: 30px;
-	}
+}
 /**** Footer ***/
 #footer{
 	position:relative;
@@ -47,5 +47,5 @@ a:visited{ text-decoration:none;}
 	width:1000px;
 	text-align:center;
 	top:40px;
-	}
+}
 

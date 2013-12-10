@@ -52,7 +52,7 @@ function openUrl(url){
 		</div><!-- end header -->
 		<br />
 		<div id="content">
-			<table border="0" cellpadding="0" width="100%">
+			<table border="0" cellpadding="0" width="100%" >
 				<tr>
 					<td>姓名</td>
 					<td>欧镇洲</td>
@@ -104,8 +104,6 @@ Fighting! <br />
 		
 	</div>
 	<br />
-	
-
 
 <script id="vs" type="x-shader/x-vertex">
 
@@ -171,7 +169,7 @@ Fighting! <br />
 
 		var canvas = document.createElement( 'canvas' );
 		canvas.width = 32;
-		canvas.height = 15;
+		canvas.height = window.innerHeight;
 
 		var context = canvas.getContext( '2d' );
 
@@ -279,6 +277,5 @@ function animate() {
 }
 
 </script>
-</body>
-
+	</body>
 </html>
