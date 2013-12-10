@@ -1,0 +1,51 @@
+@charset "utf-8";
+/* CSS Document */
+/**** Body ***/
+body{
+	background:#aedae9;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	line-height:normal;
+	color:#FFF;
+	margin:0;
+	}
+/**** Links ***/
+a{ text-decoration: none;color:#FFF;}
+a:link{ text-decoration:none;}
+a:visited{ text-decoration:none;}
+/**** Header ***/
+#header{
+	background: url(../img/background_header.png) no-repeat;
+	width:1000px;
+	height:108px;
+	margin:auto;
+	}
+.header_navigation{
+	float:right;
+	width:550px;
+	height:24px;
+	margin:24px 0 0 0;
+	}
+/*****welcome*****/
+#welcome{
+	position:absolute;
+	margin-left:50px;
+	margin-top:50px;
+}
+
+/**** content ***/
+#content{
+	background:#333;
+	width:940px;
+	margin:auto;
+	padding: 30px;
+	}
+/**** Footer ***/
+#footer{
+	position:relative;
+	margin:auto;
+	background:#333;
+	width:1000px;
+	text-align:center;
+	top:40px;
+	}
+

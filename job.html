@@ -1,260 +1,74 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Welcome To My HomePage-zhenzhou.ou</title>
-	
-<link rel="shortcut icon" href="http://xiaopihai.duapp.com/theme/images/favicon2.ico">
-<link href="css/style.css" rel="stylesheet" media="screen" />
-<link rel="stylesheet" href="css/main.css" type="text/css" media="screen">
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/three.min.js"></script>
-<script type="text/javascript" src="js/Detector.js"></script>
-
-<!--導航菜單 -->
-<script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
-<script type="text/javascript" src="js/jquery.easing.min.js"></script>
-<script type="text/javascript" src="js/jquery.mainmenuslide.js"></script>
-<script type="text/javascript">
-	$(function() {
-		$("ul").mainmenuslide({
-			fx: "backout",
-			speed: 700,
-			click: function(event, menuItem) {
-				return true;
-			}
-		});
-	});
-</script>
-</head>
-<body>
-	<div id="mainDiv">
-		<div id="header">
-			<div id="welcome">
-				Welcome To My HomePage!
-			</div>
-			<div class="header_navigation">
-				<ul class="mainmenuslide">
-					<li><a href="./index.html" >个人简介</a></li>
-					<li><a href="./learn.html">学习经历</a></li>
-					<li><a href="./job.html">工作经历</a></li>
-					<li><a href="http://www.cnblogs.com/ouzhenzhou/" target="_blank" >Blog</a></li>
-				</ul>
-			</div><!-- end header_navigation-->
-		</div><!-- end header -->
-		<br />
-		<div id="content">
-			<table border="0" cellpadding="0" width="60%">
-				<tr>
-					<td>姓名</td>
-					<td>欧镇洲</td>
-				</tr>
-				<tr>
-					<td>籍贯</td>
-					<td>湖南长沙宁乡</td>
-				</tr>
-				<tr>
-					<td>年龄</td>
-					<td>25</td>
-				</tr>
-				<tr>
-					<td>出生年月</td>
-					<td>1989-04-04</td>
-				</tr>
-				<tr>
-					<td>婚姻状况</td>
-					<td>未婚</td>
-				</tr>
-				<tr>
-					<td>邮箱</td>
-					<td>zhenzhouou@gmail.com</td>
-				</tr>
-				<tr>
-					<td>QQ</td>
-					<td>408888253</td>
-				</tr>
-			</table>
-		</div><!-- end content -->
-		<div id="footer">
-			Is Me,Is You.Where Are Us?
-		<div>
-		
-	</div>
-	<br />
-	
-</body>
-
-
-<script id="vs" type="x-shader/x-vertex">
-
-	varying vec2 vUv;
-
-	void main() {
-
-		vUv = uv;
-		gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-	}
-
-</script>
-
-<script id="fs" type="x-shader/x-fragment">
-
-	uniform sampler2D map;
-
-	uniform vec3 fogColor;
-	uniform float fogNear;
-	uniform float fogFar;
-
-	varying vec2 vUv;
-
-	void main() {
-
-		float depth = gl_FragCoord.z / gl_FragCoord.w;
-		float fogFactor = smoothstep( fogNear, fogFar, depth );
-
-		gl_FragColor = texture2D( map, vUv );
-		gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
-		gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
-
-	}
-
-</script>
-
-<script type="text/javascript">
-
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
-	var container;
-	var camera, scene, renderer;
-	var mesh, geometry, material;
-
-	var mouseX = 0, mouseY = 0;
-	var start_time = Date.now();
-
-	var windowHalfX = window.innerWidth / 2;
-	var windowHalfY = window.innerHeight / 2;
-
-	init();
-
-	function init() {
-
-		container = document.createElement( 'div' );
-		container.style.position='absolute';
-		container.style.top='0px';
-		container.style.zIndex='-99';
-		$('#mainDiv').append( container );
-
-		// Bg gradient
-
-		var canvas = document.createElement( 'canvas' );
-		canvas.width = 32;
-		canvas.height = 15;
-
-		var context = canvas.getContext( '2d' );
-
-		var gradient = context.createLinearGradient( 0, 0, 0, canvas.height );
-		gradient.addColorStop(0, "#1e4877");
-		gradient.addColorStop(0.5, "#4584b4");
-
-		context.fillStyle = gradient;
-		context.fillRect(0, 0, canvas.width, canvas.height);
-
-		container.style.background = 'url(' + canvas.toDataURL('image/png') + ')';
-				container.style.backgroundSize = '32px 100%';
-
-				//
-
-				camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 3000 );
-				camera.position.z = 6000;
-
-				scene = new THREE.Scene();
-
-				geometry = new THREE.Geometry();
-
-				var texture = THREE.ImageUtils.loadTexture( 'cloud10.png', null, animate );
-				texture.magFilter = THREE.LinearMipMapLinearFilter;
-				texture.minFilter = THREE.LinearMipMapLinearFilter;
-
-				var fog = new THREE.Fog( 0x4584b4, - 100, 3000 );
-
-				material = new THREE.ShaderMaterial( {
-
-uniforms: {
-
-"map": { type: "t", value: texture },
-"fogColor" : { type: "c", value: fog.color },
-"fogNear" : { type: "f", value: fog.near },
-"fogFar" : { type: "f", value: fog.far },
-
-},
-vertexShader: document.getElementById( 'vs' ).textContent,
-fragmentShader: document.getElementById( 'fs' ).textContent,
-depthWrite: false,
-depthTest: false,
-transparent: true
-
-} );
-
-var plane = new THREE.Mesh( new THREE.PlaneGeometry( 64, 64 ) );
-
-for ( var i = 0; i < 8000; i++ ) {
-
-	plane.position.x = Math.random() * 1000 - 500;
-	plane.position.y = - Math.random() * Math.random() * 200 - 15;
-	plane.position.z = i;
-	plane.rotation.z = Math.random() * Math.PI;
-	plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
-
-	THREE.GeometryUtils.merge( geometry, plane );
-
-}
-
-mesh = new THREE.Mesh( geometry, material );
-scene.add( mesh );
-
-mesh = new THREE.Mesh( geometry, material );
-mesh.position.z = - 8000;
-scene.add( mesh );
-
-renderer = new THREE.WebGLRenderer( { antialias: false } );
-renderer.setSize( window.innerWidth, window.innerHeight );
-container.appendChild( renderer.domElement );
-
-document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-window.addEventListener( 'resize', onWindowResize, false );
-
-}
-
-function onDocumentMouseMove( event ) {
-
-	mouseX = ( event.clientX - windowHalfX ) * 0.25;
-	mouseY = ( event.clientY - windowHalfY ) * 0.15;
-
-}
-
-function onWindowResize( event ) {
-
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-
-	renderer.setSize( window.innerWidth, window.innerHeight );
-
-}
-
-function animate() {
-
-	requestAnimationFrame( animate );
-
-	position = ( ( Date.now() - start_time ) * 0.03 ) % 8000;
-
-	camera.position.x += ( mouseX - camera.position.x ) * 0.01;
-	camera.position.y += ( - mouseY - camera.position.y ) * 0.01;
-	camera.position.z = - position + 8000;
-
-	renderer.render( scene, camera );
-
-}
-
-</script>
-</html>
+工作经历一 <hr />
+<table border="0" cellpadding="0" width="100%">
+	<tr>
+		<td style="width:100px;">公司名称</td>
+		<td>云起港科技有限公司</td>
+	</tr>
+	<tr>
+		<td>时间</td>
+		<td>2012.08 - </td>
+	</tr>
+	<tr>
+		<td>部门</td>
+		<td>资讯科技部</td>
+	</tr>
+	<tr>
+		<td>职务</td>
+		<td>PHP工程师</td>
+	</tr>
+	<tr>
+		<td>工作描述</td>
+		<td>
+1.www.funmily.com与美国及韩国gamemily，大陆5awan.com游戏平台相关 <br />
+游戏上线，包括各个接口测试，登录，充值等相关程序； <br />
+游戏报表，后台制作； <br />
+游戏活动制作； <br />
+维护平台对游戏分配点数程序及平台其他相关; <br />
+2.runup后台程序维护及程序添加，如通用加点程序，通用接口测试程序； <br />
+3.其他，如和合作商之间的程序对接； <br /><br />
+
+参与游戏《天地会》、《泰坦之王》、《圣灵之风》、《封神无敌2》、《萌三国》、《逗法Q傳》、《仙落红尘》、《神戒》、《秦美人》、《勇者之塔》、《逆乾坤》、《街机三国》等游戏上线相关，对接、报表制作、游戏活动制作及测试、游戏在后台相关功能的添加（如玩家操作记录查询、充值记录查询）； 
+平台中代码维护及功能升级； <br />
+在各个游戏中的游戏活动开发时，会事先写好活动文档（活动表设计、活动程序设计思路、测试方案、活动后台设计），根据游戏活动设定的条件与游戏中表的设计，处理游戏中数据及获得符合条件的玩家，根据测试方案与PM、GM一起完成测试； <br />
+也有制作通用活动后台，使GM可以自由进行活动，其中运用ajax、mvc开发；  <br />
+在各个游戏的报表制作中，根据报表需求及游戏中表的设计，设计表结构、各数据逻辑的处理、定时处理及转存报表中所需的游戏数据； <br />
+添加和维护后台程序时,学习了公司同事的各种不同代码(包括纯面向过程的代码)及不同的代码风格和逻辑习惯,加深了对程序的理解和技术本身的思考; <br />
+在这段工作经历中，挑战的是复杂的平台结构，多个服务器及其db的处理、多种数据逻辑、庞大数据的应对、程序的性能及安全与稳定，所幸的是一直保证了任务的质量及速度，保证了游戏正常的上线及运营 <br />
+熟悉平台主要程序
+
+	</td>
+	</tr>
+
+</table>
+
+工作经历二<hr />
+<table border="0" cellpadding="0" width="100%">
+	<tr>
+		<td style="width:100px;">公司名称</td>
+		<td>深圳深海捷科技有限公司</td>
+	</tr>
+	<tr>
+		<td>时间</td>
+		<td>2011.11 - 2012-8</td>
+	</tr>
+	<tr>
+		<td>部门</td>
+		<td>研发部</td>
+	</tr>
+	<tr>
+		<td>职务</td>
+		<td>PHP工程师</td>
+	</tr>
+	<tr>
+		<td>工作描述</td>
+		<td>
+1.参与公司客户定制CRM系统需求评审、开发<br /> 
+2.asterisk上AGI的开发 <br /> 
+3.产品升级与BUG修复 <br /><br /> 
+
+中移华捷CRM系统，芙浪特证劵CRM系统，东莞电信AGI，商联商用AGI，西家服饰AGI，短信及通话记录报表开发，系统中其他功能的完善及升级。 
+其中中移华捷与芙浪特项目中，使用了ajax提交表单、事件注册、开源js插件、API等，几个项目中AGI（电话流程）的开发是在linux系统中用vi编写及测试，在这几个AGI的开发中，在linux下开发及测试，写了详细的readme文件；在短信报表的开发中，编写了座席管理系统中SMS API，在项目中使用多个js插件（tree、ui、datatable、openflashchart等）、ajax技术，在表格分页时使用了数据优化
+	</td>
+	</tr>
+
+</table>
